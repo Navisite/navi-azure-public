@@ -1,0 +1,754 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "actionGroups_Test_name": {
+            "defaultValue": "Test",
+            "type": "String"
+        },
+        "virtualMachines_centos7_name": {
+            "defaultValue": "centos7",
+            "type": "String"
+        },
+        "availabilitySets_sampathas_name": {
+            "defaultValue": "sampathas",
+            "type": "String"
+        },
+        "dnszones_coolretrotech.com_name": {
+            "defaultValue": "coolretrotech.com",
+            "type": "String"
+        },
+        "networkInterfaces_centos7861_name": {
+            "defaultValue": "centos7861",
+            "type": "String"
+        },
+        "publicIPAddresses_centos7_ip_name": {
+            "defaultValue": "centos7-ip",
+            "type": "String"
+        },
+        "virtualNetworks_sampathrg_vnet_name": {
+            "defaultValue": "sampathrg-vnet",
+            "type": "String"
+        },
+        "NS_@_name": {
+            "defaultValue": "@",
+            "type": "String"
+        },
+        "networkSecurityGroups_sampathnsg_name": {
+            "defaultValue": "sampathnsg",
+            "type": "String"
+        },
+        "storageAccounts_sampathrgdiag943_name": {
+            "defaultValue": "sampathrgdiag943",
+            "type": "String"
+        },
+        "A_www_name": {
+            "defaultValue": "www",
+            "type": "String"
+        },
+        "SOA_@_name": {
+            "defaultValue": "@",
+            "type": "String"
+        },
+        "A_test_name": {
+            "defaultValue": "test",
+            "type": "String"
+        },
+        "CNAME_brookslb_name": {
+            "defaultValue": "brookslb",
+            "type": "String"
+        },
+        "CNAME_tonywinvm1_name": {
+            "defaultValue": "tonywinvm1",
+            "type": "String"
+        },
+        "CNAME_brookslnxvm1_name": {
+            "defaultValue": "brookslnxvm1",
+            "type": "String"
+        },
+        "CNAME_brookslnxvm2_name": {
+            "defaultValue": "brookslnxvm2",
+            "type": "String"
+        },
+        "subnets_default_name": {
+            "defaultValue": "default",
+            "type": "String"
+        },
+        "securityRules_Port_80_name": {
+            "defaultValue": "Port_80",
+            "type": "String"
+        },
+        "securityRules_default_allow_ssh_name": {
+            "defaultValue": "default-allow-ssh",
+            "type": "String"
+        },
+        "virtualMachines_centos7_id": {
+            "defaultValue": "/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Compute/disks/centos7_OsDisk_1_a27664225eae429e896f489722f504cd",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Compute/availabilitySets/sampathas'.",
+            "type": "Microsoft.Compute/availabilitySets",
+            "sku": {
+                "name": "Aligned"
+            },
+            "name": "[parameters('availabilitySets_sampathas_name')]",
+            "apiVersion": "2018-06-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "platformUpdateDomainCount": 5,
+                "platformFaultDomainCount": 2,
+                "virtualMachines": [
+                    {
+                        "id": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_centos7_name'))]"
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_centos7_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Compute/virtualMachines/centos7'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_centos7_name')]",
+            "apiVersion": "2018-06-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_sampathas_name'))]"
+                },
+                "hardwareProfile": {
+                    "vmSize": "Standard_A1"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "OpenLogic",
+                        "offer": "CentOS",
+                        "sku": "7.5",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(parameters('virtualMachines_centos7_name'),'_OsDisk_1_a27664225eae429e896f489722f504cd')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Standard_LRS",
+                            "id": "[parameters('virtualMachines_centos7_id')]"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_centos7_name')]",
+                    "adminUsername": "sysadmin",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false
+                    },
+                    "secrets": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_centos7861_name'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat('https', '://', parameters('storageAccounts_sampathrgdiag943_name'), '.blob.core.windows.net', '/')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_sampathas_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_centos7861_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_sampathrgdiag943_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/microsoft.insights/actionGroups/Test'.",
+            "type": "microsoft.insights/actionGroups",
+            "name": "[parameters('actionGroups_Test_name')]",
+            "apiVersion": "2018-03-01",
+            "location": "Global",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "groupShortName": "[parameters('actionGroups_Test_name')]",
+                "enabled": true,
+                "emailReceivers": [
+                    {
+                        "name": "Notify_-EmailAction-",
+                        "emailAddress": "saguduru@navisite.com"
+                    }
+                ],
+                "smsReceivers": [],
+                "webhookReceivers": [],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": []
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com'.",
+            "type": "Microsoft.Network/dnszones",
+            "name": "[parameters('dnszones_coolretrotech.com_name')]",
+            "apiVersion": "2018-05-01",
+            "location": "global",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "zoneType": "Public"
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/networkInterfaces/centos7861'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_centos7861_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "22b2820b-3e94-4746-8c7d-164096cb7ab7",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "etag": "W/\"e8092461-b361-47f3-aa03-807d9c29d63f\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.1.10.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_centos7_ip_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_sampathrg_vnet_name'), parameters('subnets_default_name'))]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": [],
+                    "appliedDnsServers": [],
+                    "internalDomainNameSuffix": "xgvfo24p2kqu3nciag10c4ndsh.bx.internal.cloudapp.net"
+                },
+                "macAddress": "00-0D-3A-4D-F6-0F",
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_sampathnsg_name'))]"
+                },
+                "primary": true,
+                "tapConfigurations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_centos7_ip_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_sampathrg_vnet_name'), parameters('subnets_default_name'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_sampathnsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/networkSecurityGroups/sampathnsg'.",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('networkSecurityGroups_sampathnsg_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "5ff81091-edb1-4728-be1b-2659c8ec298b",
+                "securityRules": [
+                    {
+                        "name": "default-allow-ssh",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "22",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "Port_80",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "protocol": "TCP",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "10.1.10.4",
+                            "access": "Allow",
+                            "priority": 1010,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ],
+                "defaultSecurityRules": [
+                    {
+                        "name": "AllowVnetInBound",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowAzureLoadBalancerInBound",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow inbound traffic from azure load balancer",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "AzureLoadBalancer",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllInBound",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all inbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowVnetOutBound",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "destinationAddressPrefix": "VirtualNetwork",
+                            "access": "Allow",
+                            "priority": 65000,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "AllowInternetOutBound",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Allow outbound traffic from all VMs to Internet",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "Internet",
+                            "access": "Allow",
+                            "priority": 65001,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    },
+                    {
+                        "name": "DenyAllOutBound",
+                        "etag": "W/\"123dfda9-27b4-4616-aa39-e8626b595af5\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "description": "Deny all outbound traffic",
+                            "protocol": "*",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "*",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Deny",
+                            "priority": 65500,
+                            "direction": "Outbound",
+                            "sourcePortRanges": [],
+                            "destinationPortRanges": [],
+                            "sourceAddressPrefixes": [],
+                            "destinationAddressPrefixes": []
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/publicIPAddresses/centos7-ip'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "name": "[parameters('publicIPAddresses_centos7_ip_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "84afa655-c14f-4863-a219-e0a1227bcce8",
+                "ipAddress": "40.121.10.17",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/virtualNetworks/sampathrg-vnet'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_sampathrg_vnet_name')]",
+            "apiVersion": "2018-08-01",
+            "location": "eastus",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "7357aab9-e2cf-4ea1-b448-01b7a179a397",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.1.10.0/24"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "default",
+                        "etag": "W/\"311cd9dd-8057-40eb-8184-38d94e3c7fbb\"",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "addressPrefix": "10.1.10.0/24",
+                            "delegations": []
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Storage/storageAccounts/sampathrgdiag943'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_sampathrgdiag943_name')]",
+            "apiVersion": "2018-07-01",
+            "location": "eastus",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/A/test'.",
+            "type": "Microsoft.Network/dnszones/A",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('A_test_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 60,
+                "ARecords": [
+                    {
+                        "ipv4Address": "10.112.30.31"
+                    }
+                ],
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/A/www'.",
+            "type": "Microsoft.Network/dnszones/A",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('A_www_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 3600,
+                "ARecords": [
+                    {
+                        "ipv4Address": "40.121.10.17"
+                    }
+                ],
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/CNAME/brookslb'.",
+            "type": "Microsoft.Network/dnszones/CNAME",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('CNAME_brookslb_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 3600,
+                "CNAMERecord": {
+                    "cname": "[concat(parameters('CNAME_brookslb_name'),'.southcentralus.cloudapp.azure.com')]"
+                },
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/CNAME/brookslnxvm1'.",
+            "type": "Microsoft.Network/dnszones/CNAME",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('CNAME_brookslnxvm1_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 3600,
+                "CNAMERecord": {
+                    "cname": "[concat(parameters('CNAME_brookslnxvm1_name'),'.southcentralus.cloudapp.azure.com')]"
+                },
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/CNAME/brookslnxvm2'.",
+            "type": "Microsoft.Network/dnszones/CNAME",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('CNAME_brookslnxvm2_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 3600,
+                "CNAMERecord": {
+                    "cname": "[concat(parameters('CNAME_brookslnxvm2_name'),'.southcentralus.cloudapp.azure.com')]"
+                },
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/CNAME/tonywinvm1'.",
+            "type": "Microsoft.Network/dnszones/CNAME",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('CNAME_tonywinvm1_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 3600,
+                "CNAMERecord": {
+                    "cname": "[concat(parameters('CNAME_tonywinvm1_name'),'.centralus.cloudapp.azure.com')]"
+                },
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/NS/@'.",
+            "type": "Microsoft.Network/dnszones/NS",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('NS_@_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 172800,
+                "NSRecords": [
+                    {
+                        "nsdname": "ns1-01.azure-dns.com."
+                    },
+                    {
+                        "nsdname": "ns2-01.azure-dns.net."
+                    },
+                    {
+                        "nsdname": "ns3-01.azure-dns.org."
+                    },
+                    {
+                        "nsdname": "ns4-01.azure-dns.info."
+                    }
+                ],
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/dnszones/coolretrotech.com/SOA/@'.",
+            "type": "Microsoft.Network/dnszones/SOA",
+            "name": "[concat(parameters('dnszones_coolretrotech.com_name'), '/', parameters('SOA_@_name'))]",
+            "apiVersion": "2018-05-01",
+            "scale": null,
+            "properties": {
+                "TTL": 3600,
+                "SOARecord": {
+                    "email": "azuredns-hostmaster.microsoft.com.",
+                    "expireTime": 2419200,
+                    "host": "ns1-01.azure-dns.com.",
+                    "minimumTTL": 3600,
+                    "refreshTime": 300,
+                    "retryTime": 300,
+                    "serialNumber": 1
+                },
+                "targetResource": {}
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/dnszones', parameters('dnszones_coolretrotech.com_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/networkSecurityGroups/sampathnsg/securityRules/default-allow-ssh'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_sampathnsg_name'), '/', parameters('securityRules_default_allow_ssh_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "22",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 1000,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_sampathnsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/networkSecurityGroups/sampathnsg/securityRules/Port_80'.",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "name": "[concat(parameters('networkSecurityGroups_sampathnsg_name'), '/', parameters('securityRules_Port_80_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "protocol": "TCP",
+                "sourcePortRange": "*",
+                "destinationPortRange": "80",
+                "sourceAddressPrefix": "*",
+                "destinationAddressPrefix": "10.1.10.4",
+                "access": "Allow",
+                "priority": 1010,
+                "direction": "Inbound",
+                "sourcePortRanges": [],
+                "destinationPortRanges": [],
+                "sourceAddressPrefixes": [],
+                "destinationAddressPrefixes": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroups_sampathnsg_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/50dc2735-cb4c-461e-a4b7-d9692e45232d/resourceGroups/sampathrg/providers/Microsoft.Network/virtualNetworks/sampathrg-vnet/subnets/default'.",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(parameters('virtualNetworks_sampathrg_vnet_name'), '/', parameters('subnets_default_name'))]",
+            "apiVersion": "2018-08-01",
+            "scale": null,
+            "properties": {
+                "provisioningState": "Succeeded",
+                "addressPrefix": "10.1.10.0/24",
+                "delegations": []
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_sampathrg_vnet_name'))]"
+            ]
+        }
+    ]
+}
