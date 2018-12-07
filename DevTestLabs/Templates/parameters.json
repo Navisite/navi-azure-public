@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "actionGroups_Test_name": {
+            "value": null
+        },
+        "virtualMachines_centos7_name": {
+            "value": null
+        },
+        "availabilitySets_sampathas_name": {
+            "value": null
+        },
+        "dnszones_coolretrotech.com_name": {
+            "value": null
+        },
+        "networkInterfaces_centos7861_name": {
+            "value": null
+        },
+        "publicIPAddresses_centos7_ip_name": {
+            "value": null
+        },
+        "virtualNetworks_sampathrg_vnet_name": {
+            "value": null
+        },
+        "NS_@_name": {
+            "value": null
+        },
+        "networkSecurityGroups_sampathnsg_name": {
+            "value": null
+        },
+        "storageAccounts_sampathrgdiag943_name": {
+            "value": null
+        },
+        "A_www_name": {
+            "value": null
+        },
+        "SOA_@_name": {
+            "value": null
+        },
+        "A_test_name": {
+            "value": null
+        },
+        "CNAME_brookslb_name": {
+            "value": null
+        },
+        "CNAME_tonywinvm1_name": {
+            "value": null
+        },
+        "CNAME_brookslnxvm1_name": {
+            "value": null
+        },
+        "CNAME_brookslnxvm2_name": {
+            "value": null
+        },
+        "subnets_default_name": {
+            "value": null
+        },
+        "securityRules_Port_80_name": {
+            "value": null
+        },
+        "securityRules_default_allow_ssh_name": {
+            "value": null
+        },
+        "virtualMachines_centos7_id": {
+            "value": null
+        }
+    }
+}
